@@ -1,5 +1,7 @@
 from rpi_ws281x import *
 from segment import Segment
+from main_line import MainLine
+from signal_line import SignalLine
 
 class DisplayManager:
     def __init__(self, led_count=60, brightness=50):
@@ -16,12 +18,15 @@ class DisplayManager:
         self.strip.begin()
 
         # Initialize segments
-        self.acc = self.__init_small_display(0, Color(255, 0, 0))
+        # self.acc = self.__init_small_display(0, Color(255, 0, 0))
         # self.s   = self.__init_small_display('''starting index''', Color(255, 0, 0))
         # self.a   = self.__init_small_display('''starting index''', Color(255, 0, 0))
         # self.c   = self.__init_small_display('''starting index''', Color(255, 0, 0))
         # self.i   = self.__init_small_display('''starting index''', Color(255, 0, 0))
 
+        # Initialize main lines
+        self.main_top = MainLine(self.strip, 10, 40 ,Color(0, 255, 0))
+        self.czyt = SignalLine(self.strip, 0, 10, Color(0, 0, 255))
 
     def __init_small_display(self, start_index, color):
         return [
@@ -30,7 +35,7 @@ class DisplayManager:
             Segment(self.strip, start_index + 14, color)
         ]
 
-
+        
     def __select_display(self, name: str):
         if name == "acc":
             return self.acc
