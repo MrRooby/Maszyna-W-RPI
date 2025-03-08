@@ -10,7 +10,7 @@ class WebServer:
         self.display_manager = DisplayManager(led_count=60, brightness=50)
         
         # Mount static files (your Vue.js build)
-        self.app.mount("/", StaticFiles(directory="dist", html=True), name="static")
+        self.app.mount("/static", StaticFiles(directory="dist", html=True), name="static")
         
         # WebSocket route
         @self.app.websocket("/ws")
@@ -36,4 +36,3 @@ class WebServer:
         except json.JSONDecodeError:
             print("Failed to parse JSON")
             await websocket.send_text(json.dumps({"status": "error", "message": "Invalid JSON"}))
-

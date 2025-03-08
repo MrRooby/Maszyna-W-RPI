@@ -49,6 +49,14 @@ class DisplayManager:
 
     def update_small_display(self, name: str, value):
         disp = self.__select_display(name)        
+        if disp is None:
+            return
+
+        try:
+            value = int(value)
+        except ValueError:
+            print("Invalid value: must be na integer")
+            return
 
         if value < 0:
             value = 0
