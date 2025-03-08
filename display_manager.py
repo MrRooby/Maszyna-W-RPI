@@ -16,14 +16,40 @@ class DisplayManager:
         self.strip.begin()
 
         # Initialize segments
-        self.acc = [
-            Segment(self.strip, 0, Color(255, 0, 0)),    # Red color
-            Segment(self.strip, 7, Color(255, 0, 0)),
-            Segment(self.strip, 14, Color(255, 0, 0))
+        self.acc = self.__init_small_display(0, Color(255, 0, 0))
+        # self.s   = self.__init_small_display('''starting index''', Color(255, 0, 0))
+        # self.a   = self.__init_small_display('''starting index''', Color(255, 0, 0))
+        # self.c   = self.__init_small_display('''starting index''', Color(255, 0, 0))
+        # self.i   = self.__init_small_display('''starting index''', Color(255, 0, 0))
+
+
+    def __init_small_display(self, start_index, color):
+        return [
+            Segment(self.strip, start_index, color),
+            Segment(self.strip, start_index + 7, color),
+            Segment(self.strip, start_index + 14, color)
         ]
 
 
-    def update_acc_display(self, value):
+    def __select_display(self, name: str):
+        if name == "acc":
+            return self.acc
+        elif name == "s":
+            return self.s
+        elif name == "a":
+            return self.a
+        elif name == "c":
+            return self.c
+        elif name == "i":
+            return self.i
+        else:
+            print("Input error")
+            return
+
+
+    def update_small_display(self, name: str, value):
+        disp = self.__select_display(name)        
+
         if value < 0:
             value = 0
         elif value > 999:
@@ -35,11 +61,16 @@ class DisplayManager:
         ones = value % 10
 
         # Update each segment
-        self.acc[0].display_number(hundreds)
-        self.acc[1].display_number(tens)
-        self.acc[2].display_number(ones)
+        disp[0].display_number(hundreds)
+        disp[1].display_number(tens)
+        disp[2].display_number(ones)
 
         # Update the strip
+        self.strip.show()
+
+
+    def update_stack_display(self):
+        #TODO
         self.strip.show()
 
 
