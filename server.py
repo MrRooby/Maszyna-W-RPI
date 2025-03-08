@@ -27,9 +27,20 @@ class WebServer:
     async def handle_websocket_message(self, websocket: WebSocket, data: str):
         try:
             message = json.loads(data)
-            if message["type"] == "acc_value":
-                acc_value = message["value"]
-                print(f"Received ACC value: {acc_value}")
+            if message["type"] == "values":
+                acc_value = message.get("ACC", 0)
+                a_value = message.get("A", 0)
+                s_value = message.get("S", 0)
+                c_value = message.get("C", 0)
+                i_value = message.get("I", 0)
+
+                print(f"Received values:")
+                print(f"ACC: {acc_value}")
+                print(f"A: {a_value}")
+                print(f"S: {s_value}")
+                print(f"C: {c_value}")
+                print(f"I: {i_value}")
+                
                 self.display_manager.update_small_display("acc", acc_value)
                 await websocket.send_text(json.dumps({"status": "ok"}))
 
