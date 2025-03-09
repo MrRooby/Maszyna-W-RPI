@@ -1,93 +1,103 @@
 from rpi_ws281x import *
-from segment import Segment
-from main_line import MainLine
+from bus_line import BusLine
 from signal_line import SignalLine
+from three_segment_display import ThreeSegmentDisplay
+from pao_display_line import PaODisplayLine
+from constants import *
 
 class DisplayManager:
-    def __init__(self, led_count=60, brightness=50):
+    def __init__(self, led_count_left=0, led_count_right=0, brightness=0):
+        
         # LED strip configuration
-        LED_PIN = 18      # GPIO pin connected to the pixels
+
+        # To avoid trouble don't mess with the PIN selection
+        # Those pins for sure support PWM with assigned channels
+        LED_PIN_LEFT = 19       # Left side LEDs
+        LED_PIN_RIGHT = 18      # Right side LEDs
         LED_FREQ_HZ = 800000
         LED_DMA = 10
-        LED_BRIGHTNESS = brightness
         LED_INVERT = False
-        LED_CHANNEL = 0
+        LED_CHANNEL_LEFT  = 1   # Has to be that way
+        LED_CHANNEL_RIGHT = 0   # or not worky 
 
-        self.strip = Adafruit_NeoPixel(led_count, LED_PIN, LED_FREQ_HZ, LED_DMA, 
-                                     LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-        self.strip.begin()
+        self.brightness = brightness
 
-        # Initialize segments
-        # self.acc = self.__init_small_display(0, Color(255, 0, 0))
-        # self.s   = self.__init_small_display('''starting index''', Color(255, 0, 0))
-        # self.a   = self.__init_small_display('''starting index''', Color(255, 0, 0))
-        # self.c   = self.__init_small_display('''starting index''', Color(255, 0, 0))
-        # self.i   = self.__init_small_display('''starting index''', Color(255, 0, 0))
+        self.strip_left = Adafruit_NeoPixel(
+                led_count_left, 
+                LED_PIN_LEFT, 
+                LED_FREQ_HZ, 
+                LED_DMA,
+                LED_INVERT, 
+                self.brightness, 
+                LED_CHANNEL_LEFT)
 
-        # Initialize main lines
-        self.main_top = MainLine(self.strip, 10, 40 ,Color(0, 255, 0))
-        self.czyt = SignalLine(self.strip, 0, 10, Color(0, 0, 255))
-
-    def __init_small_display(self, start_index, color):
-        return [
-            Segment(self.strip, start_index, color),
-            Segment(self.strip, start_index + 7, color),
-            Segment(self.strip, start_index + 14, color)
-        ]
-
+        self.strip_right = Adafruit_NeoPixel(
+                led_count_right, 
+                LED_PIN_RIGHT, 
+                LED_FREQ_HZ, 
+                LED_DMA,
+                LED_INVERT, 
+                self.brightness, 
+                LED_CHANNEL_RIGHT)
         
-    def __select_display(self, name: str):
-        if name == "acc":
-            return self.acc
-        elif name == "s":
-            return self.s
-        elif name == "a":
-            return self.a
-        elif name == "c":
-            return self.c
-        elif name == "i":
-            return self.i
+        self.strip_right.begin()
+        self.strip_left.begin()
+
+ #       self.__init_left_strip()
+ #       self.__init_right_strip()
+
+
+#    def __init_left_strip():
+#        self.busA  = BusLine(             self.strip_left, start_index= , length= , RED)
+#        self.icc   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.wec   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.wyc   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.c     = ThreeSegmentDisplay( self.strip_left, start_index= ,           PORTAL_ORANGE) 
+#        self.wyad  = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.i     = ThreeSegmentDisplay( self.strip_left, start_index= ,           PORTAL_ORANGE)
+#        self.wei   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.weja  = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.przep = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.dak   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.iak   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.weak  = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
+#        self.acc   = ThreeSegmentDisplay( self.strip_left, start_index= ,           PORTAL_ORANGE)
+
+
+#    def __init_right_strip():
+#        self.wea   = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
+#        self.a     = ThreeSegmentDisplay( self.strip_right, start_index= ,           PORTAL_ORANGE)
+#        self.PaO_1 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
+#        self.PaO_2 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
+#        self.czyt  = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
+#        self.PaO_3 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
+#        self.pisz  = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
+#        self.PaO_4 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
+#        self.wyak  = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
+#        self.s     = ThreeSegmentDisplay( self.strip_right, start_index= ,           PORTAL_ORANGE)
+#        self.wes   = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
+#        self.wys   = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
+#        self.busS  = BusLine(             self.strip_right, start_index= , length= , RED)
+
+
+    def set_brightness(self, brightness):
+        if 0 <= brightness <= 255:
+            self.brightness = brightness
+            self.strip_left.setBrightness(self.brightness)
+            self.strip_right.setBrightness(self.brightness)
+        
+            self.strip_right.show()
+            self.strip_left.show()
         else:
-            print("Input error")
-            return
-
-
-    def update_small_display(self, name: str, value):
-        disp = self.__select_display(name)        
-        if disp is None:
-            return
-
-        try:
-            value = int(value)
-        except ValueError:
-            print("Invalid value: must be na integer")
-            return
-
-        if value < 0:
-            value = 0
-        elif value > 999:
-            value = 999
-
-        # Split number into digits
-        hundreds = (value // 100) % 10
-        tens = (value // 10) % 10
-        ones = value % 10
-
-        # Update each segment
-        disp[0].display_number(hundreds)
-        disp[1].display_number(tens)
-        disp[2].display_number(ones)
-
-        # Update the strip
-        self.strip.show()
-
-
-    def update_stack_display(self):
-        #TODO
-        self.strip.show()
+            print("Brightness value must be between 0 and 255!")
 
 
     def clear_display(self):
-        for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, Color(0, 0, 0))
-        self.strip.show()
+        for i in range(self.strip_right.numPixels()):
+            self.strip_right.setPixelColor(i, Color(0, 0, 0))
+
+        for i in range(self.strip_left.numPixels()):
+            self.strip_left.setPixelColor(i, Color(0, 0, 0))
+
+        self.strip_right.show()
+        self.strip_left.show()

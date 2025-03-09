@@ -1,7 +1,7 @@
 import time
 from rpi_ws281x import *
 
-class MainLine:
+class BusLine:
     def __init__(self, strip=None, start_index=0, length=74 ,color=Color(0, 0, 0)):
         self.strip = strip
         self.start_index = start_index
