@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 import json
 from rpi_ws281x import *
 from display_manager import DisplayManager
+from input import ButtonHandler
 
 class WebServer:
     def __init__(self):
@@ -24,6 +25,8 @@ class WebServer:
             except Exception as e:
                 print(f"WebSocket error: {e}")
     
+        self.button_handler = ButtonHandler(ws_url="ws://localhost:8000/ws")
+
 
     async def handle_websocket_message(self, websocket: WebSocket, data: str):
         try:
@@ -112,3 +115,4 @@ class WebServer:
         except json.JSONDecodeError:
             print("Failed to parse JSON")
             await websocket.send_text(json.dumps({"status": "error", "message": "Invalid JSON"}))
+

@@ -9,5 +9,3 @@ if __name__ == "__main__":
     server = WebServer()
     print("Starting Raspberry Pi server...")
     uvicorn.run(server.app, host="0.0.0.0", port=8000)
-    disp_man.czyt.turn_on_line(True)
-    #disp_man.main_top.data_flow(choice=True)    
