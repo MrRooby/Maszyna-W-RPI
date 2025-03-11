@@ -193,5 +193,85 @@ hostname -I
 
 There might be multiple IP adresses but one of them should be `192.168.4.1`
 
+## Step 11 (working against the flaws)
+
+Creating a daemon to reset hostapd after boot
+
+```sh
+sudo nvim /usr/local/bin/restart_hostapd.sh
+```
+
+fill out with
+
+```sh
+#!/bin/bash
+systemctl restart hostapd
+systemctl restart dnsmasq
+```
+
+Give permissions
+
+```sh
+chmod a+x /usr/local/bin/restart_hostapd.sh
+```
+
+```sh
+sudo nvim /etc/systemd/system/restart_hostapd.service
+```
+
+Insert
+```sh
+[Unit]
+Description=Restart hostapd after full boot
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/restart_hostapd.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+Activate service
+```sh
+sudo systemctl daemon-reload
+sudo systemctl enable restart_hotspot.sh
+```
+
+# Setup as service
+
+```sh
+ sudo nvim /etc/systemd/system/maszynawd.service
+```
+
+```sh
+[Unit]
+Description=Run Maszyna W script after hotspot is active
+After=network.target
+Wants=network.target
+After=systemd-networkd.service
+After=NetworkManager.service
+
+[Service]
+ExecStart=/home/bartek/Maszyna-W-RPI/myenv/bin/python /home/bartek/Maszyna-W-RPI/main.py
+WorkingDirectory=/home/bartek/Maszyna-W-RPI
+StandardOutput=journal
+StandardError=journal
+Restart=on-failure
+RestartSec=10
+User=root
+Group=root
+Environment="PATH=/home/bartek/Maszyna-W-RPI/myenv/bin:/usr/bin:/bin"
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+```sh
+sudo systemctl daemon-reload 
+sudo systemctl enable maszynawd.service 
+```
 
 Your Raspberry Pi should now be configured as an access point with a static IP address and NAT enabled.
