@@ -20,6 +20,8 @@ class DisplayManager:
         LED_CHANNEL_LEFT  = 1   # Has to be that way
         LED_CHANNEL_RIGHT = 0   # or not worky 
 
+        print(led_count_right)
+
         self.brightness = brightness
 
         self.strip_left = Adafruit_NeoPixel(
@@ -42,13 +44,14 @@ class DisplayManager:
         
         self.strip_right.begin()
         self.strip_left.begin()
+        
+        #DLA TESTÓW NALEŻY POŁĄCZYĆ PIN 18
+#        self.__init_left_strip()
+        self.__init_right_strip()
 
- #       self.__init_left_strip()
- #       self.__init_right_strip()
 
-
-#    def __init_left_strip():
-#        self.busA  = BusLine(             self.strip_left, start_index= , length= , RED)
+#    def __init_left_strip(self):
+#        self.busA  = BusLine(             self.strip_left, 0 , 64 , RED)
 #        self.icc   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
 #        self.wec   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
 #        self.wyc   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
@@ -64,12 +67,12 @@ class DisplayManager:
 #        self.acc   = ThreeSegmentDisplay( self.strip_left, start_index= ,           PORTAL_ORANGE)
 
 
-#    def __init_right_strip():
-#        self.wea   = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
-#        self.a     = ThreeSegmentDisplay( self.strip_right, start_index= ,           PORTAL_ORANGE)
+    def __init_right_strip(self):
+#        self.wea   = SignalLine(          self.strip_right, start_index=0 , length=40 , PORTAL_BLUE)
+        self.a     = ThreeSegmentDisplay( self.strip_right, start_index=0 , color=PORTAL_ORANGE)
 #        self.PaO_1 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
 #        self.PaO_2 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
-#        self.czyt  = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
+#         self.czyt  = SignalLine(          self.strip_right, start_index=0 , length=5 , PORTAL_BLUE)
 #        self.PaO_3 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
 #        self.pisz  = SignalLine(          self.strip_right, start_index= , length= , PORTAL_BLUE)
 #        self.PaO_4 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
