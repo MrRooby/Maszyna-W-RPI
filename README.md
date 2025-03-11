@@ -162,7 +162,20 @@ iptables-restore < /etc/iptables.ipv4.nat
 
 Save and close the file.
 
-## Step 9: Start the Access Point
+## Step 9: Delete existing WiFi Connection
+
+List out existing WiFi connections
+
+```sh
+nmcli connection show --active
+```
+Take the `UUID` of `wlan0` and delete the connection
+
+```sh
+sudo nmcli connection delete uuid <YOUR_UUID>
+```
+
+## Step 10: Start the Access Point
 
 Finally, start the `hostapd` and `dnsmasq` services:
 
@@ -171,5 +184,14 @@ sudo systemctl restart dhcpcd
 sudo systemctl start hostapd
 sudo systemctl start dnsmasq
 ```
+
+Check if your IP is as you set it up in previous steps
+
+```sh
+hostname -I
+```
+
+There might be multiple IP adresses but one of them should be `192.168.4.1`
+
 
 Your Raspberry Pi should now be configured as an access point with a static IP address and NAT enabled.
