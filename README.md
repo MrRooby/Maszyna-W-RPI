@@ -180,8 +180,8 @@ sudo nmcli connection delete uuid <YOUR_UUID>
 Finally, start the `hostapd` and `dnsmasq` services:
 
 ```sh
-sudo systemctl restart dhcpcd
 sudo systemctl start hostapd
+sudo systemctl restart dhcpcd
 sudo systemctl start dnsmasq
 ```
 
