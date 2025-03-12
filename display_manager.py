@@ -4,6 +4,9 @@ from signal_line import SignalLine
 from three_segment_display import ThreeSegmentDisplay
 from pao_display_line import PaODisplayLine
 from constants import *
+from oszaleje import Oszaleje
+from binary_line import BinaryLine
+
 
 class DisplayManager:
     def __init__(self, led_count_left=0, led_count_right=0, brightness=0):
@@ -12,13 +15,13 @@ class DisplayManager:
 
         # To avoid trouble don't mess with the PIN selection
         # Those pins for sure support PWM with assigned channels
-        LED_PIN_LEFT = 19       # Left side LEDs
-        LED_PIN_RIGHT = 18      # Right side LEDs
+        LED_PIN_LEFT = 18       # Left side LEDs
+        LED_PIN_RIGHT = 19      # Right side LEDs
         LED_FREQ_HZ = 800000
         LED_DMA = 10
         LED_INVERT = False
-        LED_CHANNEL_LEFT  = 1   # Has to be that way
-        LED_CHANNEL_RIGHT = 0   # or not worky 
+        LED_CHANNEL_LEFT  = 0   # Has to be that way
+        LED_CHANNEL_RIGHT = 1   # or not worky 
 
         print(led_count_right)
 
@@ -50,6 +53,15 @@ class DisplayManager:
         self.__init_right_strip()
 
 
+#counter
+#acc
+#val0
+#val1
+#val2
+#val3
+#czyt
+#wys
+
 #    def __init_left_strip(self):
 #        self.busA  = BusLine(             self.strip_left, 0 , 64 , RED)
 #        self.icc   = SignalLine(          self.strip_left, start_index= , length= , PORTAL_BLUE)
@@ -68,8 +80,17 @@ class DisplayManager:
 
 
     def __init_right_strip(self):
-#        self.wea   = SignalLine(          self.strip_right, start_index=0 , length=40 , PORTAL_BLUE)
-        self.a     = ThreeSegmentDisplay( self.strip_right, start_index=0 , color=PORTAL_ORANGE)
+        self.c = BinaryLine(self.strip_right, 0, RED)
+        self.czyt = SignalLine(self.strip_right, 8, 8, RED)
+        self.acc = BinaryLine(self.strip_right, 16, PORTAL_ORANGE) 
+        self.wyc = SignalLine(self.strip_right, 24, 8, RED)
+        self.val0 = BinaryLine(self.strip_right, 32, PORTAL_BLUE)
+        self.icc = SignalLine(self.strip_right, 40, 8, RED)
+        self.val1 =BinaryLine(self.strip_right, 48, PORTAL_ORANGE)
+        self.wyad = SignalLine(self.strip_right, 56, 8, RED)
+        
+#        self.acc = Oszaleje(self.strip_right, start_index=0, color=RED)
+#        self.a     = ThreeSegmentDisplay( self.strip_right, start_index=0 , color=PORTAL_ORANGE)
 #        self.PaO_1 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
 #        self.PaO_2 = PaODisplayLine(      self.strip_right, start_index= ,           PORTAL_ORANGE)
 #         self.czyt  = SignalLine(          self.strip_right, start_index=0 , length=5 , PORTAL_BLUE)

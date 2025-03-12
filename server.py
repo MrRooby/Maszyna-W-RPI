@@ -8,7 +8,7 @@ from input import ButtonHandler
 class WebServer:
     def __init__(self):
         self.app = FastAPI()
-        self.disp_man = DisplayManager(7, 60, 50)
+        self.disp_man = DisplayManager(7, 64, 10)
         
         # Mount static files (your Vue.js build)
         self.app.mount("/static", StaticFiles(directory="dist", html=True), name="static")
@@ -94,10 +94,17 @@ class WebServer:
 #                self.disp_man.iak.turn_on_line(iak_value)
 #                self.disp_man.weak.turn_on_line(weak_value)
 #                self.disp_man.acc.display_value(acc_value)
-
-                # Right side LEDs
+                self.disp_man.c.display_value(c_value)
+                self.disp_man.czyt.turn_on_line(czyt_value)
+                self.disp_man.acc.display_value(acc_value)
+                self.disp_man.wyc.turn_on_line(wyc_value)
+                self.disp_man.val0.display_value(pao_vals[0])
+                self.disp_man.icc.turn_on_line(icc_value)
+                self.disp_man.val1.display_value(pao_vals[1])
+                self.disp_man.wyad.turn_on_line(wyad_value)
 #                self.disp_man.wea.turn_on_line(wea_value)
-                self.disp_man.a.display_value(a_value)
+#                self.disp_man.acc.display_value(acc_value)
+#                self.disp_man.a.display_value(a_value)
 #                self.disp_man.PaO_0.display_line(pao_addrs[0], pao_args[0], pao_vals[0])
 #                self.disp_man.PaO_1.display_line(pao_addrs[1], pao_args[1], pao_vals[1])
 #                self.disp_man.czyt.turn_on_line(czyt_value)

@@ -6,7 +6,6 @@ class SignalLine:
         self.start_index = start_index
         self.color = color
         self.length = length
-        print(self.strip, start_index, color, length)
 
     def turn_on_line(self, choice):
         if not choice:
@@ -15,6 +14,7 @@ class SignalLine:
         elif choice:
             print("line turned on")
             for i in range(self.start_index, self.length):
+                print(i, " turned on")
                 self.strip.setPixelColor(i, self.color)
         self.strip.show()
     
